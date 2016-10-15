@@ -12,4 +12,4 @@ if (TK_BUILD_SHARED)
 endif()
 
 add_library(tk-graphics ${BUILD_MODE} ${SOURCES} ${HEADERS})
-add_dependencies(tk-core)
+add_dependencies(tk-graphics tk-core)
