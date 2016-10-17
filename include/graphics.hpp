@@ -1,10 +1,10 @@
 #pragma once
-
+#include <linkage.hpp>
 
 namespace tk {
     namespace graphics {
 
-        bool initializeExtensions();
+        TK_API bool initializeExtensions();
 
     }
 }
