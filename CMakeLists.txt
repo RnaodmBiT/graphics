@@ -5,8 +5,8 @@ find_package(OpenGL)
 
 option(TK_BUILD_SHARED "TK_BUILD_SHARED" ON)
 
-file(GLOB SOURCES src/*.cpp src/*.c)
-file(GLOB HEADERS include/*.hpp include/*.h)
+file(GLOB_RECURSE SOURCES src/*.cpp src/*.c)
+file(GLOB_RECURSE HEADERS include/*.hpp)
 
 add_definitions(-DTK_BUILD)
 
