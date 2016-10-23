@@ -5,7 +5,7 @@
 namespace tk {
     namespace graphics {
 
-        TK_API bool initializeExtensions();
+        TK_GRAPHICS bool initializeExtensions();
 
     }
 }

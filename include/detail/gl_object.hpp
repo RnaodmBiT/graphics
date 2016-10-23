@@ -1,12 +1,13 @@
 #pragma once
 #include <utility>
 #include <GL/glew.h>
+#include <linkage.hpp>
 
 
 namespace tk {
     namespace graphics {
 
-        class GLObject {
+        class TK_GRAPHICS GLObject {
         protected:
             GLuint object;
         public:
@@ -19,6 +20,7 @@ namespace tk {
 
             GLObject& operator=(GLObject&& move) {
                 std::swap(object, move.object);
+                return *this;
             }
 
             GLObject(const GLObject& copy) = delete;

@@ -18,21 +18,21 @@ namespace tk {
         void Shader::loadProgram(const std::string& vertexFile, const std::string& fragmentFile) {
             deleteProgram();
 
-            program = glCreateProgram();
+            object = glCreateProgram();
 
-            glAttachShader(program, loadShader(vertexFile, GL_VERTEX_SHADER));
-            glAttachShader(program, loadShader(fragmentFile, GL_FRAGMENT_SHADER));
+            glAttachShader(object, loadShader(vertexFile, GL_VERTEX_SHADER));
+            glAttachShader(object, loadShader(fragmentFile, GL_FRAGMENT_SHADER));
 
-            glLinkProgram(program);
+            glLinkProgram(object);
 
             GLint linked;
-            glGetProgramiv(program, GL_LINK_STATUS, &linked);
+            glGetProgramiv(object, GL_LINK_STATUS, &linked);
             GLint len = 0;
             GLsizei size = 0;
-            glGetProgramiv(program, GL_INFO_LOG_LENGTH, &len);
+            glGetProgramiv(object, GL_INFO_LOG_LENGTH, &len);
             std::string log(len, ' ');
             if (len > 1 && !linked) {
-                glGetInfoLogARB(program, len, &size, &log[0]);
+                glGetInfoLogARB(object, len, &size, &log[0]);
                 printf("%s\n", log.c_str());
             }
         }
@@ -58,6 +58,8 @@ namespace tk {
                 glGetInfoLogARB(shader, len, &size, &log[0]);
                 printf("%s\n", log.c_str());
             }
+
+            return shader;
         }
 
 
