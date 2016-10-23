@@ -17,6 +17,8 @@ namespace tk {
 
             Shader(const std::string& vertex, const std::string& fragment);
             ~Shader();
+
+            void apply();
         };
 
     }

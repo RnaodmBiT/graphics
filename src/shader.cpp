@@ -72,5 +72,10 @@ namespace tk {
             deleteProgram();
         }
 
+
+        void Shader::apply() {
+            glUseProgram(object);
+        }
+
     }
 }
