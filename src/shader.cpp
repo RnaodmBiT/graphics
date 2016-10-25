@@ -1,6 +1,6 @@
-#pragma once
 #include <shader.hpp>
 #include <GL/glew.h>
+#include <cstdio>
 
 #include <file.hpp>
 
