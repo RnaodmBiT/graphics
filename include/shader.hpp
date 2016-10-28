@@ -3,15 +3,23 @@
 #include <GL/glew.h>
 #include <detail/gl_object.hpp>
 #include <linkage.hpp>
+#include <vector.hpp>
+#include <matrix.hpp>
+#include <map>
 
 namespace tk {
     namespace graphics {
 
         class TK_GRAPHICS Shader : public GLObject {
+
+            std::map<std::string, int> uniforms;
+
             void loadProgram(const std::string& vertex, const std::string& fragment);
             GLuint loadShader(const std::string& file, GLenum type);
 
             void deleteProgram();
+
+            void findUniforms();
 
         public:
 
@@ -19,6 +27,12 @@ namespace tk {
             ~Shader();
 
             void apply();
+
+            void setUniform(const std::string& name, const core::Vec2f& vec);
+            void setUniform(const std::string& name, const core::Vec3f& vec);
+            void setUniform(const std::string& name, const core::Vec4f& vec);
+
+            void setUniform(const std::string& name, const core::Mat4f& mat);
         };
 
     }
