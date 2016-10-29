@@ -6,6 +6,7 @@
 #include <buffer.hpp>
 #include <render_state.hpp>
 #include <shader.hpp>
+#include <texture.hpp>
 
 namespace tk {
     namespace graphics {

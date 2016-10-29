@@ -10,6 +10,7 @@ namespace tk {
 
         class Shader::Impl : public GLObject {
             std::map<std::string, int> uniforms;
+            int textureUnit;
 
             void deleteProgram() {
                 if (object) {
@@ -97,6 +98,7 @@ namespace tk {
 
             void apply() {
                 glUseProgram(object);
+                textureUnit = 0;
             }
 
 
@@ -117,6 +119,14 @@ namespace tk {
 
             void setUniform(const std::string& name, const core::Mat4f& mat) {
                 glUniformMatrix4fv(uniforms[name], 1, true, mat.data.data());
+            }
+
+
+            void setUniform(const std::string& name, const Texture& texture) {
+                glActiveTexture(GL_TEXTURE0 + textureUnit);
+                texture.bind();
+
+                glUniform1i(uniforms[name], textureUnit++);
             }
         };
 
@@ -150,6 +160,10 @@ namespace tk {
 
         void Shader::setUniform(const std::string& name, const core::Mat4f& mat) {
             impl->setUniform(name, mat);
+        }
+
+        void Shader::setUniform(const std::string& name, const Texture& texture) {
+            impl->setUniform(name, texture);
         }
 
     }

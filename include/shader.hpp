@@ -5,7 +5,7 @@
 #include <linkage.hpp>
 #include <vector.hpp>
 #include <matrix.hpp>
-#include <map>
+#include <texture.hpp>
 
 namespace tk {
     namespace graphics {
@@ -26,6 +26,8 @@ namespace tk {
             void setUniform(const std::string& name, const core::Vec4f& vec);
 
             void setUniform(const std::string& name, const core::Mat4f& mat);
+            
+            void setUniform(const std::string& name, const Texture& texture);
         };
 
     }
