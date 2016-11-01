@@ -67,4 +67,4 @@ set(BASE_SRCS
     src/winfonts/winfnt.c
     )
 
-add_library(freetype STATIC ${BASE_SRCS} )
+add_library(freetype ${BUILD_MODE} ${BASE_SRCS} )

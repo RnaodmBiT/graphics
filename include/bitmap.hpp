@@ -16,7 +16,7 @@ namespace tk {
             }
 
             Bitmap(int width, int height, T* data) : width(width), height(height) {
-                data = std::vector(data, data + (width * height));
+                data = std::vector<T>(data, data + (width * height));
             }
 
             const T* getData() const {

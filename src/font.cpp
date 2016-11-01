@@ -4,6 +4,13 @@
 #include <codecvt>
 #include FT_FREETYPE_H
 
+#if defined(MSVC)
+    typedef uint32_t utf32char;
+#else
+    typedef char32_t utf32char;
+#endif
+
+
 namespace tk {
     namespace graphics {
 
@@ -36,8 +43,8 @@ namespace tk {
 
                 FT_Set_Pixel_Sizes(face, 0, size);
 
-                std::wstring_convert<std::codecvt_utf8<uint32_t>, uint32_t> utf32conv;
-                std::basic_string<uint32_t> utf32 = utf32conv.from_bytes(text);
+                std::wstring_convert<std::codecvt_utf8<utf32char>, utf32char> utf32conv;
+                std::basic_string<utf32char> utf32 = utf32conv.from_bytes(text);
 
                 FT_GlyphSlot slot = face->glyph;
                 FT_UInt prevIndex = 0;
@@ -73,8 +80,8 @@ namespace tk {
                 core::Vec2i bounds = measureText(text, size);
                 Bitmap<uint8_t> image(bounds.x, bounds.y);
 
-                std::wstring_convert<std::codecvt_utf8<uint32_t>, uint32_t> utf32conv;
-                std::basic_string<uint32_t> utf32 = utf32conv.from_bytes(text);
+                std::wstring_convert<std::codecvt_utf8<utf32char>, utf32char> utf32conv;
+                std::basic_string<utf32char> utf32 = utf32conv.from_bytes(text);
 
                 FT_GlyphSlot slot = face->glyph;
                 FT_UInt prevIndex = 0;
