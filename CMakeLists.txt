@@ -3,6 +3,9 @@ project (tk-graphics)
 
 find_package(OpenGL)
 
+add_subdirectory(thirdparty/freetype-2.4.0)
+include_directories(thirdparty/freetype-2.4.0/include)
+
 option(TK_BUILD_SHARED "TK_BUILD_SHARED" ON)
 
 file(GLOB_RECURSE SOURCES src/*.cpp src/*.c)
@@ -19,4 +22,4 @@ endif()
 add_definitions(-DGLEW_BUILD)
 
 add_library(tk-graphics ${BUILD_MODE} ${SOURCES} ${HEADERS})
-target_link_libraries(tk-graphics tk-core ${OPENGL_gl_LIBRARY})
+target_link_libraries(tk-graphics tk-core freetype ${OPENGL_gl_LIBRARY})

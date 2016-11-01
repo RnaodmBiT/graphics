@@ -7,6 +7,8 @@
 #include <render_state.hpp>
 #include <shader.hpp>
 #include <texture.hpp>
+#include <bitmap.hpp>
+#include <font.hpp>
 
 namespace tk {
     namespace graphics {
