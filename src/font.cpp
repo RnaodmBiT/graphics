@@ -121,6 +121,10 @@ namespace tk {
             delete impl;
         }
 
+        core::IResource* Font::loadFromFile(const std::string& filename) {
+            return new Font(filename);
+        }
+
         core::Vec2i Font::measureText(const std::string& text, int size) {
             return impl->measureText(text, size);
         }
