@@ -4,7 +4,7 @@
 #include <codecvt>
 #include FT_FREETYPE_H
 
-#if defined(MSVC)
+#if defined(_MSC_VER)
     typedef uint32_t utf32char;
 #else
     typedef char32_t utf32char;
