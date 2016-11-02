@@ -141,6 +141,11 @@ namespace tk {
         }
 
 
+        core::IResource* Shader::loadFromFile(const std::string& vertex, const std::string& fragment) {
+            return new Shader(vertex, fragment);
+        }
+
+
         void Shader::apply() {
             impl->apply();
         }

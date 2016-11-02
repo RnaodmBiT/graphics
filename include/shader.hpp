@@ -6,11 +6,12 @@
 #include <vector.hpp>
 #include <matrix.hpp>
 #include <texture.hpp>
+#include <resource.hpp>
 
 namespace tk {
     namespace graphics {
 
-        class TK_GRAPHICS Shader {
+        class TK_GRAPHICS Shader : public core::IResource {
             class Impl;
             Impl* impl;
 
@@ -18,6 +19,8 @@ namespace tk {
 
             Shader(const std::string& vertex, const std::string& fragment);
             ~Shader();
+
+            static core::IResource* loadFromFile(const std::string& vertex, const std::string& fragment);
 
             void apply();
 
