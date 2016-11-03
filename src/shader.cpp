@@ -3,6 +3,7 @@
 #include <cstdio>
 #include <map>
 
+#include <log.hpp>
 #include <file.hpp>
 
 namespace tk {
@@ -36,12 +37,15 @@ namespace tk {
                 GLsizei size = 0;
                 glGetProgramiv(object, GL_INFO_LOG_LENGTH, &len);
                 std::string log(len, ' ');
-                if (len > 1 && !linked) {
+                if (len > 1) {
                     glGetInfoLogARB(object, len, &size, &log[0]);
-                    printf("%s\n", log.c_str());
+                    tk_debug(log);
                 }
 
+                tk_assert(linked, core::format("Error linking shaders: %% and %%", vertexFile, fragmentFile));
+
                 findUniforms();
+                tk_info(core::format("Built shader: (%%, %%)", vertexFile, fragmentFile));
             }
 
 
@@ -49,11 +53,13 @@ namespace tk {
                 GLuint shader = glCreateShader(type);
 
                 std::string sourceCode = core::readFile(file);
+                tk_assert(sourceCode.size(), core::format("Error reading code from shader: %%", file));
+
                 const char* sourcePtr = sourceCode.data();
                 GLint sourceLength = (GLint)sourceCode.size();
 
-            glShaderSource(shader, 1, &sourcePtr, &sourceLength);
-            glCompileShader(shader);
+                glShaderSource(shader, 1, &sourcePtr, &sourceLength);
+                glCompileShader(shader);
 
                 GLint compiled;
                 glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
@@ -61,10 +67,12 @@ namespace tk {
                 GLsizei size = 0;
                 glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &len);
                 std::string log(len, ' ');
-                if (len > 1 && !compiled) {
+                if (len > 1) {
                     glGetInfoLogARB(shader, len, &size, &log[0]);
-                    printf("%s\n", log.c_str());
+                    tk_debug(log);
                 }
+
+                tk_assert(compiled, core::format("Error compiling shader: %%", file));
 
                 return shader;
             }
@@ -82,8 +90,6 @@ namespace tk {
                     glGetActiveUniformName(object, i, 256, nullptr, nameBuffer);
                     int location = glGetUniformLocation(object, nameBuffer);
                     uniforms.insert({ nameBuffer, location });
-
-                    printf("Uniform (%i): %s\n", location, nameBuffer);
                 }
             }
 
