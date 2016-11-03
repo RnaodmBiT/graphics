@@ -8,7 +8,8 @@
 namespace tk {
     namespace graphics {
 
-        class TK_GRAPHICS Array : public GLObject {
+        class TK_GRAPHICS Array {
+            GLuint object;
             GLenum topology;
             int attributeCount;
 
@@ -16,8 +17,15 @@ namespace tk {
 
         public:
 
+            Array() : object(0) { }
             Array(GLenum topology);
             ~Array();
+
+            Array(const Array&) = delete;
+            void operator=(const Array&) = delete;
+
+            Array(Array&& move);
+            void operator=(Array&& move);
 
             void bind() const;
             void addBuffer(const Buffer& buffer, GLenum dataType, int vectorSize);

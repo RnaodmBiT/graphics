@@ -15,5 +15,11 @@ namespace tk {
             glBindTexture(target, object);
         }
 
+        void Texture::useRedAsAlpha() {
+            bind();
+            GLint swizzle[] = { GL_ONE, GL_ONE, GL_ONE, GL_RED };
+            glTexParameteriv(target, GL_TEXTURE_SWIZZLE_RGBA, swizzle);
+        }
+
     }
 }

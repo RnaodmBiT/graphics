@@ -9,6 +9,7 @@
 #include <texture.hpp>
 #include <bitmap.hpp>
 #include <font.hpp>
+#include <shape.hpp>
 
 namespace tk {
     namespace graphics {

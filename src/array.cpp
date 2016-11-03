@@ -22,6 +22,18 @@ namespace tk {
         }
 
 
+        Array::Array(Array&& move) {
+            *this = std::move(move);
+        }
+
+
+        void Array::operator=(Array&& move) {
+            std::swap(object, move.object);
+            std::swap(topology, move.topology);
+            std::swap(attributeCount, move.attributeCount);
+        }
+
+
         void Array::bind() const {
             glBindVertexArray(object);
         }

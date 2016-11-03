@@ -30,6 +30,8 @@ namespace tk {
                 glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
                 glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             }
+
+            void useRedAsAlpha();
         };
 
     }
