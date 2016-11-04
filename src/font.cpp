@@ -1,4 +1,6 @@
 #include <font.hpp>
+#include <log.hpp>
+#include <utility.hpp>
 #include <ft2build.h>
 #include <locale>
 #include <codecvt>
@@ -31,7 +33,12 @@ namespace tk {
         public:
 
             Impl(const std::string& filename) {
-                FT_New_Face(getLibrary(), filename.c_str(), 0, &face);
+                int r = FT_New_Face(getLibrary(), filename.c_str(), 0, &face);
+                tk_warn(r == 0, core::format("Error opening font file: %%", filename));
+
+                if (r == 0) {
+                    tk_info(core::format("Loaded font: %%", filename));
+                }
             }
 
             ~Impl() {
