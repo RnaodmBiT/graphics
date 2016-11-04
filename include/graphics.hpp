@@ -10,6 +10,7 @@
 #include <bitmap.hpp>
 #include <font.hpp>
 #include <shape.hpp>
+#include <scene_graph.hpp>
 
 namespace tk {
     namespace graphics {
