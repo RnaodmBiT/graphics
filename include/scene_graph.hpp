@@ -5,10 +5,16 @@
 namespace tk {
     namespace graphics {
 
-        class IRenderNode : public core::Node<IRenderNode> {
+        class IDrawable {
         public:
-            IRenderNode(const std::string& name) : core::Node<IRenderNode>(name) { }
-            virtual ~IRenderNode() { }
+            virtual ~IDrawable() { }
+            virtual void draw() { }
+        };
+
+
+        class IDrawableNode : public core::Node<IDrawable> {
+        public:
+            IDrawableNode(const std::string& name) : core::Node<IDrawable>(name) { }
             virtual void draw() {
                 for (auto& child : children) {
                     child->draw();
@@ -17,13 +23,13 @@ namespace tk {
         };
 
 
-        class TranslateNode : public IRenderNode {
+        class TranslateNode : public IDrawableNode {
         public:
-            TranslateNode(const std::string& name) : IRenderNode(name) { }
+            TranslateNode(const std::string& name) : IDrawableNode(name) { }
             void draw() {
                 tk_info(core::format("Hello World %%", name));
 
-                IRenderNode::draw();
+                IDrawableNode::draw();
             }
         };
 
