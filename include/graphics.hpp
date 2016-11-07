@@ -4,7 +4,6 @@
 
 #include <array.hpp>
 #include <buffer.hpp>
-#include <render_state.hpp>
 #include <shader.hpp>
 #include <texture.hpp>
 #include <bitmap.hpp>

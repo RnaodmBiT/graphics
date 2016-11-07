@@ -108,6 +108,16 @@ namespace tk {
             }
 
 
+            void setUniform(const std::string& name, int value) {
+                glUniform1i(uniforms[name], value);
+            }
+
+
+            void setUniform(const std::string& name, float value) {
+                glUniform1f(uniforms[name], value);
+            }
+
+
             void setUniform(const std::string& name, const core::Vec2f& vec) {
                 glUniform2fv(uniforms[name], 1, vec.data.data());
             }
@@ -134,6 +144,14 @@ namespace tk {
 
                 glUniform1i(uniforms[name], textureUnit++);
             }
+
+
+            void clearTexture(const std::string& name) {
+                glActiveTexture(GL_TEXTURE0 + textureUnit);
+                glBindTexture(GL_TEXTURE_2D, 0);
+
+                glUniform1i(uniforms[name], textureUnit++);
+            }
         };
 
 
@@ -157,6 +175,14 @@ namespace tk {
         }
 
 
+        void Shader::setUniform(const std::string& name, int vec) {
+            impl->setUniform(name, vec);
+        }
+
+        void Shader::setUniform(const std::string& name, float vec) {
+            impl->setUniform(name, vec);
+        }
+
         void Shader::setUniform(const std::string& name, const core::Vec2f& vec) {
             impl->setUniform(name, vec);
         }
@@ -175,6 +201,10 @@ namespace tk {
 
         void Shader::setUniform(const std::string& name, const Texture& texture) {
             impl->setUniform(name, texture);
+        }
+
+        void Shader::clearTexture(const std::string& name) {
+            impl->clearTexture(name);
         }
 
     }

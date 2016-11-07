@@ -7,9 +7,13 @@ namespace tk {
             glDeleteTextures(1, &object);
         }
 
-        Texture::Texture(GLenum target) : target(target) { }
+        Texture::Texture(GLenum target) : target(target) {
+            glGenTextures(1, &object);
+        }
 
-        Texture::~Texture() { }
+        Texture::~Texture() { 
+            deleteTexture();
+        }
 
         void Texture::bind() const {
             glBindTexture(target, object);

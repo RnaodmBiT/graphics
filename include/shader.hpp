@@ -24,6 +24,9 @@ namespace tk {
 
             void apply();
 
+            void setUniform(const std::string& name, int value);
+            void setUniform(const std::string& name, float value);
+
             void setUniform(const std::string& name, const core::Vec2f& vec);
             void setUniform(const std::string& name, const core::Vec3f& vec);
             void setUniform(const std::string& name, const core::Vec4f& vec);
@@ -31,6 +34,8 @@ namespace tk {
             void setUniform(const std::string& name, const core::Mat4f& mat);
             
             void setUniform(const std::string& name, const Texture& texture);
+
+            void clearTexture(const std::string& name);
         };
 
     }

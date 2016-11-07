@@ -1,8 +1,8 @@
 #pragma once
 #include <node.hpp>
 #include <log.hpp>
-#include <render_state.hpp>
 #include <shape.hpp>
+#include <texture.hpp>
 
 namespace tk {
     namespace graphics {
@@ -10,35 +10,17 @@ namespace tk {
         class IDrawable {
         public:
             virtual ~IDrawable() { }
-            virtual void draw(RenderState& state) { }
+            virtual void draw(const core::Mat4f& transform = core::Mat4f()) { }
         };
 
 
         class IDrawableNode : public core::Node<IDrawable> {
         public:
             IDrawableNode(const std::string& name) : core::Node<IDrawable>(name) { }
-            virtual void draw(RenderState& state) {
+            virtual void draw(const core::Mat4f& transform = core::Mat4f()) {
                 for (auto& child : children) {
-                    child->draw(state);
+                    child->draw(transform);
                 }
-            }
-        };
-
-
-        class TransformNode : public IDrawableNode {
-            core::Mat4f matrix;
-        public:
-            TransformNode(const std::string& name, const core::Mat4f& m = core::Mat4f()) : IDrawableNode(name), matrix(m) { }
-            void draw(RenderState& state) {
-                state.pushMatrix();
-                state.transform(matrix);
-
-                IDrawableNode::draw(state);
-                state.popMatrix();
-            }
-
-            core::Mat4f& getMatrix() {
-                return matrix;
             }
         };
 
@@ -46,14 +28,44 @@ namespace tk {
         class ShapeNode : public IDrawableNode {
             Shape& shape;
             core::Vec4f tint;
+            core::Mat4f transform;
+            const Texture* texture;
+            Shader* shader;
+            bool drawChildrenFirst;
         public:
-            ShapeNode(const std::string& name, Shape& shape, const core::Vec4f& tint = { 1, 1, 1, 1 }) : IDrawableNode(name), shape(shape), tint(tint) { }
-            void draw(RenderState& state) {
-                state.getShader()->setUniform("transform", state.getTransform());
-                state.getShader()->setUniform("tint", tint);
+            ShapeNode(const std::string& name,
+                      Shape& shape,
+                      const core::Mat4f transform,
+                      Shader* shader,
+                      const Texture* texture = nullptr,
+                      const core::Vec4f& tint = { 1, 1, 1, 1 }) : 
+                IDrawableNode(name), shape(shape), tint(tint), texture(texture), shader(shader), transform(transform), drawChildrenFirst(false) { }
+
+            void setDrawOrder(bool childrenFirst) {
+                drawChildrenFirst = childrenFirst;
+            }
+
+            void draw(const core::Mat4f& t = core::Mat4f()) {
+                core::Mat4f matrix = t * transform;
+
+                if (drawChildrenFirst) {
+                    IDrawableNode::draw(matrix);
+                }
+
+                shader->apply();
+                shader->setUniform("transform", matrix);
+                shader->setUniform("tint", tint);
+                if (texture) {
+                    shader->setUniform("image", *texture);
+                } else {
+                    shader->clearTexture("image");
+                }
+
                 shape.draw();
 
-                IDrawableNode::draw(state);
+                if (!drawChildrenFirst) {
+                    IDrawableNode::draw(matrix);
+                }
             }
         };
 
