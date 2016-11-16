@@ -18,8 +18,8 @@ namespace tk {
 
             static IResource* loadFromFile(const std::string& filename);
 
-            core::Vec2i measureText(const std::string& text, int size);
-            Bitmap<uint8_t> renderText(const std::string& text, int size);
+            core::Vec2i measureText(const std::string& text, int size) const;
+            Bitmap<uint8_t> renderText(const std::string& text, int size) const;
 
         };
 

@@ -14,6 +14,7 @@
 namespace tk {
     namespace graphics {
 
+        TK_GRAPHICS bool initialize();
         TK_GRAPHICS bool initializeExtensions();
 
     }

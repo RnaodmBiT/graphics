@@ -45,7 +45,7 @@ namespace tk {
                 FT_Done_Face(face);
             }
 
-            core::Vec2i measureText(const std::string& text, int size) {
+            core::Vec2i measureText(const std::string& text, int size) const {
                 core::Vec2i bounds;
 
                 FT_Set_Pixel_Sizes(face, 0, size);
@@ -81,7 +81,7 @@ namespace tk {
                 return bounds;
             }
 
-            Bitmap<uint8_t> renderText(const std::string& text, int size) {
+            Bitmap<uint8_t> renderText(const std::string& text, int size) const {
                 FT_Set_Pixel_Sizes(face, 0, size);
 
                 core::Vec2i bounds = measureText(text, size);
@@ -132,11 +132,11 @@ namespace tk {
             return new Font(filename);
         }
 
-        core::Vec2i Font::measureText(const std::string& text, int size) {
+        core::Vec2i Font::measureText(const std::string& text, int size) const {
             return impl->measureText(text, size);
         }
 
-        Bitmap<uint8_t> Font::renderText(const std::string& text, int size) {
+        Bitmap<uint8_t> Font::renderText(const std::string& text, int size) const {
             return impl->renderText(text, size);
         }
     }

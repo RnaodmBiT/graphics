@@ -22,6 +22,14 @@ namespace tk {
                 std::swap(vertexCount, move.vertexCount);
             }
 
+            void operator=(Shape&& move) {
+                std::swap(vertexBuffer, move.vertexBuffer);
+                std::swap(colorBuffer, move.colorBuffer);
+                std::swap(uvBuffer, move.uvBuffer);
+                std::swap(array, move.array);
+                std::swap(vertexCount, move.vertexCount);
+            }
+
             static Shape rectangle(const core::Vec2f& position, const core::Vec2f& size);
 
             void draw();
