@@ -92,6 +92,7 @@ namespace tk {
             Shader* shader;
             const Font* font;
             bool drawChildrenFirst;
+            core::Vec2i textSize;
         public:
             TextNode(const std::string& name,
                      const Font* font,
@@ -107,8 +108,9 @@ namespace tk {
 
             void setText(const std::string& text, int size) {
                 Bitmap<uint8_t> textData = font->renderText(text, size);
+                textSize = { textData.getWidth(), textData.getHeight() };
 
-                std::swap(shape, Shape::rectangle({ 0, 0 }, { (float)textData.getWidth(), (float)textData.getHeight() }));
+                std::swap(shape, Shape::rectangle({ 0, 0 }, { (float)textSize.x, (float)textSize.y }));
                 texture.setData(textData.getData(), textData.getWidth(), textData.getHeight(), GL_R8, GL_RED, GL_UNSIGNED_BYTE);
                 texture.useRedAsAlpha();
             }
@@ -134,6 +136,10 @@ namespace tk {
                 if (!drawChildrenFirst) {
                     DrawableNode::draw(matrix);
                 }
+            }
+
+            const core::Vec2i& getSize() const {
+                return textSize;
             }
         };
 

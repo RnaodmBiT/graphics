@@ -31,6 +31,7 @@ namespace tk {
             }
 
             static Shape rectangle(const core::Vec2f& position, const core::Vec2f& size);
+            static Shape circle(const core::Vec2f& position, float radius, int resolution = 32);
 
             void draw();
 
