@@ -1,9 +1,9 @@
 #pragma once
 #include <linkage.hpp>
-#include <detail/gl_object.hpp>
 #include <buffer.hpp>
 #include <vector>
 #include <cstdint>
+#include <GL/glew.h>
 
 namespace tk {
     namespace graphics {
@@ -20,9 +20,6 @@ namespace tk {
             Array() : object(0) { }
             Array(GLenum topology);
             ~Array();
-
-            Array(const Array&) = delete;
-            void operator=(const Array&) = delete;
 
             Array(Array&& move);
             void operator=(Array&& move);

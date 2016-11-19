@@ -12,26 +12,13 @@ namespace tk {
             int vertexCount;
         public:
 
-            Shape() { }
-
-            Shape(Shape&& move) :
-                vertexBuffer(std::move(move.vertexBuffer)),
-                colorBuffer(std::move(move.colorBuffer)),
-                uvBuffer(std::move(move.uvBuffer)),
-                array(std::move(move.array)) {
-                std::swap(vertexCount, move.vertexCount);
-            }
-
-            void operator=(Shape&& move) {
-                std::swap(vertexBuffer, move.vertexBuffer);
-                std::swap(colorBuffer, move.colorBuffer);
-                std::swap(uvBuffer, move.uvBuffer);
-                std::swap(array, move.array);
-                std::swap(vertexCount, move.vertexCount);
-            }
+            Shape();
+            Shape(Shape&& move);
+            void operator=(Shape&& move);
 
             static Shape rectangle(const core::Vec2f& position, const core::Vec2f& size);
             static Shape circle(const core::Vec2f& position, float radius, int resolution = 32);
+            static Shape polygon(const core::Vec2f* points, const core::Vec4f* colors, const core::Vec2f* uvs, int count);
 
             void draw();
 

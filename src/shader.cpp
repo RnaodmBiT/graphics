@@ -9,7 +9,8 @@
 namespace tk {
     namespace graphics {
 
-        class Shader::Impl : public GLObject {
+        class Shader::Impl {
+            GLuint object;
             std::map<std::string, int> uniforms;
             int textureUnit;
 
@@ -19,7 +20,6 @@ namespace tk {
                     object = 0;
                 }
             }
-
 
             void loadProgram(const std::string& vertexFile, const std::string& fragmentFile) {
                 deleteProgram();
@@ -48,7 +48,6 @@ namespace tk {
                 tk_info(core::format("Built shader: (%%, %%)", vertexFile, fragmentFile));
             }
 
-
             GLuint loadShader(const std::string& file, GLenum type) {
                 GLuint shader = glCreateShader(type);
 
@@ -76,7 +75,6 @@ namespace tk {
 
                 return shader;
             }
-
 
             void findUniforms() {
                 uniforms.clear();
@@ -107,36 +105,29 @@ namespace tk {
                 textureUnit = 0;
             }
 
-
             void setUniform(const std::string& name, int value) {
                 glUniform1i(uniforms[name], value);
             }
-
 
             void setUniform(const std::string& name, float value) {
                 glUniform1f(uniforms[name], value);
             }
 
-
             void setUniform(const std::string& name, const core::Vec2f& vec) {
                 glUniform2fv(uniforms[name], 1, vec.data.data());
             }
-
 
             void setUniform(const std::string& name, const core::Vec3f& vec) {
                 glUniform3fv(uniforms[name], 1, vec.data.data());
             }
 
-
             void setUniform(const std::string& name, const core::Vec4f& vec) {
                 glUniform4fv(uniforms[name], 1, vec.data.data());
             }
 
-
             void setUniform(const std::string& name, const core::Mat4f& mat) {
                 glUniformMatrix4fv(uniforms[name], 1, true, mat.data.data());
             }
-
 
             void setUniform(const std::string& name, const Texture& texture) {
                 glActiveTexture(GL_TEXTURE0 + textureUnit);
@@ -144,7 +135,6 @@ namespace tk {
 
                 glUniform1i(uniforms[name], textureUnit++);
             }
-
 
             void clearTexture(const std::string& name) {
                 glActiveTexture(GL_TEXTURE0 + textureUnit);
@@ -159,21 +149,25 @@ namespace tk {
             impl = new Impl(vertex, fragment);
         }
 
-
         Shader::~Shader() {
             delete impl;
         }
 
+        Shader::Shader(Shader&& move) {
+            std::swap(impl, move.impl);
+        }
+
+        void Shader::operator=(Shader&& move) {
+            std::swap(impl, move.impl);
+        }
 
         core::IResource* Shader::loadFromFile(const std::string& vertex, const std::string& fragment) {
             return new Shader(vertex, fragment);
         }
 
-
         void Shader::apply() {
             impl->apply();
         }
-
 
         void Shader::setUniform(const std::string& name, int vec) {
             impl->setUniform(name, vec);
