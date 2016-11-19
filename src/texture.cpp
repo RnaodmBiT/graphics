@@ -1,5 +1,5 @@
 #include <texture.hpp>
-#include <algorithm>>
+#include <algorithm>
 
 namespace tk {
     namespace graphics {
