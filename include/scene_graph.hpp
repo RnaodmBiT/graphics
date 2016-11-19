@@ -1,24 +1,27 @@
 #pragma once
-#include <node.hpp>
-#include <log.hpp>
 #include <shape.hpp>
 #include <texture.hpp>
+#include <shader.hpp>
+#include <font.hpp>
+#include <core.hpp>
 
 namespace tk {
     namespace graphics {
 
         class IDrawable {
         public:
-            virtual ~IDrawable() { }
-            virtual void draw(const core::Mat4f& transform = core::Mat4f()) { }
+            virtual ~IDrawable() { };
+            virtual void draw(const core::Mat4f& transform = core::Mat4f()) { };
         };
 
 
         class DrawableNode : public core::Node<IDrawable> {
         protected:
             core::Mat4f transform;
+            core::Vec4f tint;
         public:
-            DrawableNode(const std::string& name) : core::Node<IDrawable>(name) { }
+            DrawableNode(const std::string& name) : Node<IDrawable>(name), tint{ 1.0f, 1.0f, 1.0f, 1.0f } { }
+
             virtual void draw(const core::Mat4f& matrix = core::Mat4f()) {
                 core::Mat4f result = matrix * transform;
                 for (auto& child : children) {
@@ -26,41 +29,40 @@ namespace tk {
                 }
             }
 
-            const core::Mat4f& getTransform() const { return transform; }
-            void setTransform(const core::Mat4f& matrix) { transform = matrix; }
+            const core::Mat4f& getTransform() const {
+                return transform;
+            }
+
+            void setTransform(const core::Mat4f& matrix) {
+                transform = matrix;
+            }
+
+            const core::Vec4f& getTint() const {
+                return tint;
+            }
+
+            void setTint(const core::Vec4f& color) {
+                tint = color;
+            }
         };
 
 
         class ShapeNode : public DrawableNode {
-            Shape& shape;
-            core::Vec4f tint;
+            const Shape& shape;
             const Texture* texture;
             Shader* shader;
-            bool drawChildrenFirst;
         public:
-            ShapeNode(const std::string& name,
-                      Shape& shape,
-                      const core::Mat4f transform,
-                      Shader* shader,
-                      const Texture* texture = nullptr,
-                      const core::Vec4f& tint = { 1, 1, 1, 1 }) : 
-                DrawableNode(name), shape(shape), tint(tint), texture(texture), shader(shader), drawChildrenFirst(false) {
-                setTransform(transform);
-            }
+            ShapeNode(const std::string& name, const Shape& shape, Shader* shader, const Texture* texture = nullptr) :
+                DrawableNode(name),
+                shape(shape),
+                shader(shader),
+                texture(texture) { }
 
-            void setDrawOrder(bool childrenFirst) {
-                drawChildrenFirst = childrenFirst;
-            }
-
-            void draw(const core::Mat4f& t = core::Mat4f()) {
-                core::Mat4f matrix = t * transform;
-
-                if (drawChildrenFirst) {
-                    DrawableNode::draw(matrix);
-                }
+            void draw(const core::Mat4f& matrix = core::Mat4f()) {
+                core::Mat4f t = matrix * transform;
 
                 shader->apply();
-                shader->setUniform("transform", matrix);
+                shader->setUniform("transform", t);
                 shader->setUniform("tint", tint);
                 if (texture) {
                     shader->setUniform("image", *texture);
@@ -70,39 +72,23 @@ namespace tk {
 
                 shape.draw();
 
-                if (!drawChildrenFirst) {
-                    DrawableNode::draw(matrix);
-                }
-            }
-
-            const core::Vec4f& getTint() const {
-                return tint;
-            }
-
-            void setTint(const core::Vec4f& newTint) {
-                tint = newTint;
+                DrawableNode::draw(t);
             }
         };
 
 
         class TextNode : public DrawableNode {
             Shape shape;
-            core::Vec4f tint;
             Texture texture;
             Shader* shader;
             const Font* font;
-            bool drawChildrenFirst;
             core::Vec2i textSize;
         public:
-            TextNode(const std::string& name,
-                     const Font* font,
-                     const std::string& text,
-                     int size,
-                     const core::Mat4f transform,
-                     Shader* shader,
-                     const core::Vec4f& tint = { 1, 1, 1, 1 }) :
-                DrawableNode(name), font(font), tint(tint), shader(shader), drawChildrenFirst(false), texture(GL_TEXTURE_2D) {
-                setTransform(transform);
+            TextNode(const std::string& name, const Font* font, const std::string& text, int size, Shader* shader) :
+                DrawableNode(name),
+                font(font),
+                shader(shader),
+                texture(GL_TEXTURE_2D) {
                 setText(text, size);
             }
 
@@ -115,27 +101,17 @@ namespace tk {
                 texture.useRedAsAlpha();
             }
 
-            void setDrawOrder(bool childrenFirst) {
-                drawChildrenFirst = childrenFirst;
-            }
-
-            void draw(const core::Mat4f& t = core::Mat4f()) {
-                core::Mat4f matrix = t * transform;
-
-                if (drawChildrenFirst) {
-                    DrawableNode::draw(matrix);
-                }
+            void draw(const core::Mat4f& matrix = core::Mat4f()) {
+                core::Mat4f t = matrix * transform;
 
                 shader->apply();
-                shader->setUniform("transform", matrix);
+                shader->setUniform("transform", t);
                 shader->setUniform("tint", tint);
                 shader->setUniform("image", texture);
 
                 shape.draw();
 
-                if (!drawChildrenFirst) {
-                    DrawableNode::draw(matrix);
-                }
+                DrawableNode::draw(t);
             }
 
             const core::Vec2i& getSize() const {

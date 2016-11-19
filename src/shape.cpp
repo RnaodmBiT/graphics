@@ -77,7 +77,7 @@ namespace tk {
                 uvs.push_back({ 0.5f, 0.5f });
             }
 
-            return polygon(points.data(), colors.data(), uvs.data(), points.size());
+            return polygon(points.data(), colors.data(), uvs.data(), (int)points.size());
         }
 
         Shape Shape::polygon(const core::Vec2f* points, const core::Vec4f* colors, const core::Vec2f* uvs, int count) {
@@ -99,7 +99,7 @@ namespace tk {
             return shape;
         }
 
-        void Shape::draw() {
+        void Shape::draw() const {
             array.draw(0, vertexCount);
         }
 

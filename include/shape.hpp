@@ -20,7 +20,7 @@ namespace tk {
             static Shape circle(const core::Vec2f& position, float radius, int resolution = 32);
             static Shape polygon(const core::Vec2f* points, const core::Vec4f* colors, const core::Vec2f* uvs, int count);
 
-            void draw();
+            void draw() const;
 
         };
 
