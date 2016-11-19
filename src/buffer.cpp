@@ -1,4 +1,5 @@
 #include <buffer.hpp>
+#include <algorithm>
 
 
 namespace tk {

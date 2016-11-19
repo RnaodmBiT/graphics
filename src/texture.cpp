@@ -1,4 +1,5 @@
 #include <texture.hpp>
+#include <algorithm>>
 
 namespace tk {
     namespace graphics {
@@ -13,6 +14,15 @@ namespace tk {
 
         Texture::~Texture() { 
             deleteTexture();
+        }
+
+        Texture::Texture(Texture&& move) {
+            *this = std::move(move);
+        }
+
+        void Texture::operator=(Texture&& move) {
+            std::swap(object, move.object);
+            std::swap(target, move.target);
         }
 
         void Texture::bind() const {

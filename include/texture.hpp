@@ -1,12 +1,13 @@
 #pragma once
 
 #include <linkage.hpp>
-#include <detail/gl_object.hpp>
+#include <GL/glew.h>
 
 namespace tk {
     namespace graphics {
 
-        class TK_GRAPHICS Texture : public GLObject {
+        class TK_GRAPHICS Texture {
+            GLuint object;
             GLenum target;
 
             void deleteTexture();
@@ -15,6 +16,9 @@ namespace tk {
 
             Texture(GLenum target);
             ~Texture();
+
+            Texture(Texture&& move);
+            void operator=(Texture&& move);
 
             void bind() const;
 
