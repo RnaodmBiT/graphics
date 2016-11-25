@@ -8,10 +8,24 @@
 namespace tk {
     namespace graphics {
 
+        struct RenderState {
+            core::Mat4f transform;
+            Shader* shader;
+
+            RenderState() : shader(nullptr) { }
+            RenderState(const core::Mat4f& transform) : transform(transform), shader(nullptr) { }
+
+            void setShader(Shader* s) {
+                if (s) {
+                    shader = s;
+                }
+            }
+        };
+
         class IDrawable {
         public:
             virtual ~IDrawable() { };
-            virtual void draw(const core::Mat4f& transform = core::Mat4f()) { };
+            virtual void draw(RenderState state) { };
         };
 
 
@@ -19,14 +33,21 @@ namespace tk {
         protected:
             core::Mat4f transform;
             core::Vec4f tint;
-        public:
-            DrawableNode(const std::string& name) : Node<IDrawable>(name), tint{ 1.0f, 1.0f, 1.0f, 1.0f } { }
+            Shader* shader;
 
-            virtual void draw(const core::Mat4f& matrix = core::Mat4f()) {
-                core::Mat4f result = matrix * transform;
+        public:
+            DrawableNode(const std::string& name) : Node<IDrawable>(name), tint{ 1.0f, 1.0f, 1.0f, 1.0f }, shader(nullptr) { }
+
+            virtual void draw(RenderState state) {
+                state.transform = state.transform * transform;
+                state.setShader(shader);
                 for (auto& child : children) {
-                    child->draw(result);
+                    child->draw(state);
                 }
+            }
+
+            void setShader(Shader* s) {
+                shader = s;
             }
 
             const core::Mat4f& getTransform() const {
@@ -50,29 +71,27 @@ namespace tk {
         class ShapeNode : public DrawableNode {
             const Shape& shape;
             const Texture* texture;
-            Shader* shader;
         public:
-            ShapeNode(const std::string& name, const Shape& shape, Shader* shader, const Texture* texture = nullptr) :
+            ShapeNode(const std::string& name, const Shape& shape, const Texture* texture = nullptr) :
                 DrawableNode(name),
                 shape(shape),
-                shader(shader),
                 texture(texture) { }
 
-            void draw(const core::Mat4f& matrix = core::Mat4f()) {
-                core::Mat4f t = matrix * transform;
+            void draw(RenderState state) {
+                state.setShader(shader);
 
-                shader->apply();
-                shader->setUniform("transform", t);
-                shader->setUniform("tint", tint);
+                state.shader->apply();
+                state.shader->setUniform("transform", state.transform * transform);
+                state.shader->setUniform("tint", tint);
                 if (texture) {
-                    shader->setUniform("image", *texture);
+                    state.shader->setUniform("image", *texture);
                 } else {
-                    shader->clearTexture("image");
+                    state.shader->clearTexture("image");
                 }
 
                 shape.draw();
 
-                DrawableNode::draw(t);
+                DrawableNode::draw(state);
             }
         };
 
@@ -80,14 +99,12 @@ namespace tk {
         class TextNode : public DrawableNode {
             Shape shape;
             Texture texture;
-            Shader* shader;
             const Font* font;
             core::Vec2i textSize;
         public:
-            TextNode(const std::string& name, const Font* font, const std::string& text, int size, Shader* shader) :
+            TextNode(const std::string& name, const Font* font, const std::string& text, int size) :
                 DrawableNode(name),
                 font(font),
-                shader(shader),
                 texture(GL_TEXTURE_2D) {
                 setText(text, size);
             }
@@ -101,17 +118,17 @@ namespace tk {
                 texture.useRedAsAlpha();
             }
 
-            void draw(const core::Mat4f& matrix = core::Mat4f()) {
-                core::Mat4f t = matrix * transform;
+            void draw(RenderState state) {
+                state.setShader(shader);
 
-                shader->apply();
-                shader->setUniform("transform", t);
-                shader->setUniform("tint", tint);
-                shader->setUniform("image", texture);
+                state.shader->apply();
+                state.shader->setUniform("transform", state.transform * transform);
+                state.shader->setUniform("tint", tint);
+                state.shader->setUniform("image", texture);
 
                 shape.draw();
 
-                DrawableNode::draw(t);
+                DrawableNode::draw(state);
             }
 
             const core::Vec2i& getSize() const {
