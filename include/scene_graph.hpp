@@ -130,7 +130,8 @@ namespace tk {
                 Bitmap<uint8_t> textData = font->renderText(text, size);
                 textSize = { textData.getWidth(), textData.getHeight() };
 
-                std::swap(shape, Shape::rectangle({ 0, 0 }, { (float)textSize.x, (float)textSize.y }));
+                Shape rect = Shape::rectangle({ 0, 0 }, { (float)textSize.x, (float)textSize.y });
+                std::swap(shape, rect);
                 texture.setData(textData.getData(), textData.getWidth(), textData.getHeight(), GL_R8, GL_RED, GL_UNSIGNED_BYTE);
                 texture.useRedAsAlpha();
             }
