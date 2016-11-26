@@ -65,17 +65,30 @@ namespace tk {
             void setTint(const core::Vec4f& color) {
                 tint = color;
             }
+
+            virtual core::Vec2f getSize() const {
+                return{ 0.0f, 0.0f };
+            }
         };
 
 
         class ShapeNode : public DrawableNode {
+            Shape shapeInternal;
             const Shape& shape;
             const Texture* texture;
+            core::Vec2f size;
         public:
-            ShapeNode(const std::string& name, const Shape& shape, const Texture* texture = nullptr) :
+            ShapeNode(const std::string& name, const Shape* shape, const Texture* texture = nullptr) :
                 DrawableNode(name),
-                shape(shape),
+                shape(*shape),
                 texture(texture) { }
+
+            ShapeNode(const std::string& name, Shape& shape, const Texture* texture = nullptr, const core::Vec2f size = { 0.0f, 0.0f }) :
+                DrawableNode(name),
+                shapeInternal(std::move(shape)),
+                shape(shapeInternal),
+                texture(texture),
+                size(size) { }
 
             void draw(RenderState state) {
                 state.setShader(shader);
@@ -92,6 +105,10 @@ namespace tk {
                 shape.draw();
 
                 DrawableNode::draw(state);
+            }
+
+            core::Vec2f getSize() const {
+                return size;
             }
         };
 
@@ -131,8 +148,8 @@ namespace tk {
                 DrawableNode::draw(state);
             }
 
-            const core::Vec2i& getSize() const {
-                return textSize;
+            core::Vec2f getSize() const {
+                return{ (float)textSize.x, (float)textSize.y };
             }
         };
 
