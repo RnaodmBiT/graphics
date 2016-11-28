@@ -1,4 +1,5 @@
 #include <shape.hpp>
+#include <core.hpp>
 
 namespace tk {
     namespace graphics {
