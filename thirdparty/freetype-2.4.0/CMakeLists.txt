@@ -24,6 +24,9 @@ include_directories("src/psnames")
 add_definitions(-DFT2_BUILD_LIBRARY)
 add_definitions("-DFT_CONFIG_MODULES_H=<ftmodule.h>")
 
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+
 set(BASE_SRCS
     src/autofit/autofit.c
     src/bdf/bdf.c
@@ -67,4 +70,4 @@ set(BASE_SRCS
     src/winfonts/winfnt.c
     )
 
-add_library(freetype ${BUILD_MODE} ${BASE_SRCS} )
+add_library(freetype STATIC ${BASE_SRCS} )
