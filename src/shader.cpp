@@ -92,7 +92,7 @@ namespace tk {
             }
 
         public:
-            Impl(const std::string& vertex, const std::string& fragment) {
+            Impl(const std::string& vertex, const std::string& fragment) : object(0) {
                 loadProgram(vertex, fragment);
             }
 
