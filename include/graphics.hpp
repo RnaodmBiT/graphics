@@ -17,5 +17,8 @@ namespace tk {
         TK_GRAPHICS bool initialize();
         TK_GRAPHICS bool initializeExtensions();
 
+        TK_GRAPHICS void clipRectangle(const core::Vec2f& position, const core::Vec2f& size);
+        TK_GRAPHICS void clearClip();
+
     }
 }
