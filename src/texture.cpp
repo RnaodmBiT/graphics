@@ -32,7 +32,7 @@ namespace tk {
             int width, height, components;
             stbi_uc* data = stbi_load(filename.c_str(), &width, &height, &components, 4);
             tk_assert(data, core::format("Error loading image file %%", filename));
-
+            tk_info(core::format("Texture loaded: %%", filename));
             Texture* texture = new Texture(GL_TEXTURE_2D);
             texture->setData(data, width, height, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE);
             return texture;
