@@ -60,5 +60,10 @@ namespace tk {
             return{ textureWidth, textureHeight };
         }
 
+        void Texture::enableMipmap(bool enable) {
+            bind();
+            glTexParameteri(target, GL_TEXTURE_MIN_FILTER, enable ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
+        }
+
     }
 }

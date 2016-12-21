@@ -34,18 +34,23 @@ namespace tk {
             void bind() const;
 
             template <class T>
-            void setData(T* data, int width, int height, GLenum internalFormat, GLenum format, GLenum type) {
+            void setData(T* data, int width, int height, GLenum internalFormat, GLenum format, GLenum type, bool mipmap = true) {
                 textureWidth = width;
                 textureHeight = height;
 
                 bind();
                 glTexImage2D(target, 0, internalFormat, width, height, 0, format, type, data);
-                glGenerateMipmap(target);
+
+                if (mipmap) {
+                    glGenerateMipmap(target);
+                } else {
+                    glTexParameteri(target, GL_TEXTURE_MAX_LEVEL, 1);
+                }
 
                 glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
                 glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-                glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                glTexParameteri(target, GL_TEXTURE_MIN_FILTER, mipmap ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
                 glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             }
 
@@ -54,6 +59,8 @@ namespace tk {
             void useRedAsAlpha();
 
             core::Vec2i getSize() const;
+
+            void enableMipmap(bool enable);
         };
 
     }
