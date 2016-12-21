@@ -23,7 +23,7 @@ namespace tk {
         }
 
 
-        Buffer::Buffer(Buffer&& move) {
+        Buffer::Buffer(Buffer&& move) : object(0) {
             *this = std::move(move);
         }
 
