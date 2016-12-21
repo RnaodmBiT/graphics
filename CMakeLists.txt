@@ -21,5 +21,7 @@ add_definitions(-DGLEW_BUILD)
 add_subdirectory(thirdparty/freetype-2.4.0)
 include_directories(thirdparty/freetype-2.4.0/include)
 
+include_directories(thirdparty/stb)
+
 add_library(tk-graphics ${BUILD_MODE} ${SOURCES} ${HEADERS})
 target_link_libraries(tk-graphics tk-core freetype ${OPENGL_gl_LIBRARY})
