@@ -8,10 +8,12 @@ namespace tk {
     namespace graphics {
 
         void Texture::deleteTexture() {
-            glDeleteTextures(1, &object);
+            if (object) {
+                glDeleteTextures(1, &object);
+            }
         }
 
-        Texture::Texture(GLenum target) : target(target) {
+        Texture::Texture(GLenum target) : object(0), target(target), textureWidth(0), textureHeight(0) {
             glGenTextures(1, &object);
         }
 
@@ -19,7 +21,7 @@ namespace tk {
             deleteTexture();
         }
 
-        Texture::Texture(Texture&& move) {
+        Texture::Texture(Texture&& move) : object(0) {
             *this = std::move(move);
         }
 
